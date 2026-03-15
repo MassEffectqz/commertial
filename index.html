@@ -30,11 +30,6 @@
             html {
                 scroll-behavior: auto;
             }
-
-            .fade-in-section {
-                animation: none !important;
-                opacity: 1 !important;
-            }
         }
 
         body {
@@ -44,18 +39,6 @@
             margin: 0;
             padding: 0;
             background: #fff;
-        }
-
-        /* Анимация появления секций */
-        .fade-in-section {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .fade-in-section.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .layout {
@@ -582,7 +565,7 @@
     </aside>
 
     <main class="main-content">
-        <header class="fade-in-section">
+        <header>
             <div class="header-logo">
                 <img src="logo.png" alt=".dev group">
             </div>
@@ -598,9 +581,9 @@
             Дата: 15.03.2026
         </div>
 
-        <h1 class="fade-in-section">Разработка интернет-магазина</h1>
+        <h1>Разработка интернет-магазина</h1>
 
-        <h2 id="evaluation" class="fade-in-section">Объем работ и оценка</h2>
+        <h2 id="evaluation">Объем работ и оценка</h2>
         <table>
             <thead>
                 <tr>
@@ -624,7 +607,7 @@
             </tbody>
         </table>
 
-        <h2 id="client" class="fade-in-section">Клиентская часть (витрина)</h2>
+        <h2 id="client">Клиентская часть (витрина)</h2>
         <table>
             <thead>
                 <tr>
@@ -646,7 +629,7 @@
             </tbody>
         </table>
 
-        <h2 id="admin" class="fade-in-section">Административная панель</h2>
+        <h2 id="admin">Административная панель</h2>
         <table>
             <thead>
                 <tr>
@@ -666,7 +649,7 @@
             </tbody>
         </table>
 
-        <h2 id="tech" class="fade-in-section">Технические особенности</h2>
+        <h2 id="tech">Технические особенности</h2>
         <div class="tech-list">
             <div class="tech-item"><span>Frontend</span>React 19, TypeScript, SSR</div>
             <div class="tech-item"><span>Backend</span>Node.js, Express, PostgreSQL</div>
@@ -676,7 +659,7 @@
             <div class="tech-item"><span>DevOps</span>Docker, CI/CD, миграции БД, Nginx</div>
         </div>
 
-        <h2 id="security" class="fade-in-section">Безопасность</h2>
+        <h2 id="security">Безопасность</h2>
         <table>
             <thead>
                 <tr>
@@ -971,7 +954,7 @@
             <p style="font-size: 11px; color: #666; margin-top: 15px; font-weight: normal; letter-spacing: 0;">Конечная сумма может обсуждаться</p>
         </div>
 
-        <h2 id="payment" class="fade-in-section">Условия оплаты</h2>
+        <h2 id="payment">Условия оплаты</h2>
 
         <div class="payment-option">
             <h3>Вариант 1. Прямой расчет</h3>
@@ -1026,22 +1009,6 @@
         const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrollPercentage = (scrollTop / scrollHeight) * 100;
         progressBar.style.width = scrollPercentage + '%';
-    });
-
-    // Анимация появления секций
-    const fadeInSectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-
-    document.querySelectorAll('.fade-in-section').forEach(section => {
-        fadeInSectionObserver.observe(section);
     });
 
     // Подсветка активного пункта навигации

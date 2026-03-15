@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шпаргалка по технологиям | .dev group</title>
+    <link rel="icon" type="image/png" href="logo2.png">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #000;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background: #f5f5f5;
+            border-right: 1px solid #e0e0e0;
+            padding: 30px 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-logo img {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+            display: block;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-list li {
+            margin: 0;
+        }
+
+        .nav-list a {
+            display: block;
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #333;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .nav-list a:hover {
+            background: #e8e8e8;
+            border-left-color: #000;
+        }
+
+        .nav-list a.active {
+            background: #e0e0e0;
+            border-left-color: #000;
+            font-weight: 700;
+        }
+
+        .main-content {
+            padding: 60px 40px;
+            max-width: 900px;
+            margin-left: calc(260px + (100vw - 260px - 900px) / 2);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 60px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 20px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 40px 0 40px;
+        }
+
+        h2 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            scroll-margin-top: 20px;
+        }
+
+        h3 {
+            font-size: 13px;
+            font-weight: 700;
+            margin: 25px 0 10px;
+            color: #000;
+        }
+
+        .term-card {
+            background: #f9f9f9;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-left: 3px solid #000;
+        }
+
+        .term-card h4 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .term-card p {
+            margin: 0;
+            font-size: 13px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .term-card code {
+            background: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: "Consolas", "Monaco", monospace;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: background 0.2s ease;
+        }
+
+        .print-btn:hover {
+            background: #333;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: #fff;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media print {
+            .print-btn, .sidebar, .mobile-menu-btn {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 20px;
+            }
+
+            .term-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .sidebar.mobile-open {
+                display: block;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 80px 20px 40px;
+            }
+
+            .term-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Распечатать / PDF</button>
+<button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="logo.png" alt=".dev group logo">
+        </div>
+        <nav>
+            <ul class="nav-list">
+                <li><a href="#frontend">Frontend</a></li>
+                <li><a href="#backend">Backend</a></li>
+                <li><a href="#database">База данных</a></li>
+                <li><a href="#security">Безопасность</a></li>
+                <li><a href="#performance">Производительность</a></li>
+                <li><a href="#seo">SEO</a></li>
+                <li><a href="#devops">DevOps</a></li>
+                <li><a href="#testing">Тестирование</a></li>
+                <li><a href="#files">Работа с файлами</a></li>
+                <li><a href="#api">API</a></li>
+                <li><a href="#auth">Аутентификация</a></li>
+                <li><a href="#react">React хуки</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header>
+            <div class="header-logo">
+                <img src="logo.png" alt=".dev group">
+            </div>
+            <div style="font-size: 12px; text-transform: uppercase; text-align: right;">
+                Шпаргалка по технологиям<br>
+                .dev group / 2026
+            </div>
+        </header>
+
+        <h1>Техническая шпаргалка</h1>
+
+        <h2 id="frontend">Frontend</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>React 19</h4>
+                <p>Библиотека JavaScript для создания пользовательских интерфейсов. Версия 19 включает улучшения производительности и новые возможности.</p>
+            </div>
+            <div class="term-card">
+                <h4>TypeScript</h4>
+                <p>Надмножество JavaScript с добавленной статической типизацией. Помогает находить ошибки на этапе разработки.</p>
+            </div>
+            <div class="term-card">
+                <h4>SSR (Server-Side Rendering)</h4>
+                <p>Рендеринг React-компонентов на сервере. Улучшает SEO и скорость первой отрисовки страницы.</p>
+            </div>
+            <div class="term-card">
+                <h4>TailwindCSS</h4>
+                <p>Утилитарный CSS-фреймворк. Позволяет стилизовать элементы прямо в HTML с помощью готовых классов.</p>
+            </div>
+            <div class="term-card">
+                <h4>Code Splitting</h4>
+                <p>Разделение кода на несколько файлов (чанков). Ускоряет загрузку страницы.</p>
+            </div>
+            <div class="term-card">
+                <h4>Lazy Loading</h4>
+                <p>Ленивая загрузка компонентов. Загружает код только когда он нужен пользователю.</p>
+            </div>
+        </div>
+
+        <h2 id="backend">Backend</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>Node.js</h4>
+                <p>Среда выполнения JavaScript на стороне сервера. Позволяет использовать JS для бэкенда.</p>
+            </div>
+            <div class="term-card">
+                <h4>Express</h4>
+                <p>Минималистичный веб-фреймворк для Node.js. Упрощает создание API и серверов.</p>
+            </div>
+            <div class="term-card">
+                <h4>RESTful API</h4>
+                <p>Архитектурный стиль для API. Использует HTTP-методы (GET, POST, PUT, DELETE) для работы с ресурсами.</p>
+            </div>
+            <div class="term-card">
+                <h4>Middleware</h4>
+                <p>Промежуточное ПО в Express. Обрабатывает запросы до попадания в основной обработчик.</p>
+            </div>
+        </div>
+
+        <h2 id="database">База данных</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>PostgreSQL</h4>
+                <p>Реляционная СУБД с открытым исходным кодом. Поддерживает сложные запросы и транзакции.</p>
+            </div>
+            <div class="term-card">
+                <h4>Миграции БД</h4>
+                <p>Версионирование схемы базы данных. Позволяет применять изменения структуры поэтапно.</p>
+            </div>
+            <div class="term-card">
+                <h4>ORM</h4>
+                <p>Object-Relational Mapping. Преобразует данные между объектами кода и таблицами БД.</p>
+            </div>
+            <div class="term-card">
+                <h4>Параметризованные запросы</h4>
+                <p>SQL-запросы с параметрами. Защищают от SQL-инъекций.</p>
+            </div>
+        </div>
+
+        <h2 id="security">Безопасность</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>JWT (JSON Web Token)</h4>
+                <p>Стандарт для безопасной передачи данных между сторонами. Используется для аутентификации.</p>
+            </div>
+            <div class="term-card">
+                <h4>bcrypt</h4>
+                <p>Функция хеширования паролей. Добавляет "соль" для защиты от радужных таблиц.</p>
+            </div>
+            <div class="term-card">
+                <h4>CSRF (Cross-Site Request Forgery)</h4>
+                <p>Атака, заставляющая пользователя выполнить нежелательное действие. Защищается токенами.</p>
+            </div>
+            <div class="term-card">
+                <h4>Rate Limiting</h4>
+                <p>Ограничение количества запросов от одного клиента. Защита от DDoS и брутфорса.</p>
+            </div>
+            <div class="term-card">
+                <h4>Helmet.js</h4>
+                <p>Набор middleware для Express. Добавляет HTTP-заголовки безопасности (CSP, HSTS, X-Frame-Options).</p>
+            </div>
+            <div class="term-card">
+                <h4>CSP (Content Security Policy)</h4>
+                <p>Политика безопасности контента. Ограничивает источники загружаемых ресурсов.</p>
+            </div>
+            <div class="term-card">
+                <h4>SQL Injection</h4>
+                <p>Внедрение вредоносного SQL-кода через пользовательский ввод. Защищается параметризованными запросами.</p>
+            </div>
+            <div class="term-card">
+                <h4>XSS (Cross-Site Scripting)</h4>
+                <p>Внедрение вредоносного JavaScript. Защищается экранированием вывода и CSP.</p>
+            </div>
+            <div class="term-card">
+                <h4>HTTPS</h4>
+                <p>Безопасная версия HTTP с шифрованием TLS/SSL. Защищает данные при передаче.</p>
+            </div>
+            <div class="term-card">
+                <h4>HSTS</h4>
+                <p>HTTP Strict Transport Security. Принудительно использует HTTPS для домена.</p>
+            </div>
+        </div>
+
+        <h2 id="performance">Производительность</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>Кэширование</h4>
+                <p>Сохранение результатов вычислений для быстрого доступа. Уменьшает нагрузку на БД.</p>
+            </div>
+            <div class="term-card">
+                <h4>Gzip сжатие</h4>
+                <p>Сжатие HTTP-ответов сервером. Уменьшает размер передаваемых данных.</p>
+            </div>
+            <div class="term-card">
+                <h4>Sharp</h4>
+                <p>Библиотека для обработки изображений. Конвертирует в WebP, создаёт превью, ресайзит.</p>
+            </div>
+            <div class="term-card">
+                <h4>WebP</h4>
+                <p>Современный формат изображений. На 25-35% меньше JPEG при том же качестве.</p>
+            </div>
+            <div class="term-card">
+                <h4>Debouncing</h4>
+                <p>Задержка выполнения функции до прекращения ввода. Используется в поиске.</p>
+            </div>
+            <div class="term-card">
+                <h4>useMemo</h4>
+                <p>Хук React для мемоизации значений. Кэширует результат вычислений.</p>
+            </div>
+            <div class="term-card">
+                <h4>useCallback</h4>
+                <p>Хук React для мемоизации функций. Предотвращает пересоздание функций при ререндере.</p>
+            </div>
+        </div>
+
+        <h2 id="seo">SEO</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>Schema.org</h4>
+                <p>Микроразметка для поисковиков. Добавляет структурированные данные о товарах, отзывах и т.д.</p>
+            </div>
+            <div class="term-card">
+                <h4>Sitemap.xml</h4>
+                <p>Файл со списком всех страниц сайта. Помогает поисковикам индексировать контент.</p>
+            </div>
+            <div class="term-card">
+                <h4>Robots.txt</h4>
+                <p>Файл с правилами для поисковых ботов. Указывает, какие страницы можно сканировать.</p>
+            </div>
+            <div class="term-card">
+                <h4>Open Graph</h4>
+                <p>Метатеги для соцсетей. Контролируют, как ссылка отображается при шеринге.</p>
+            </div>
+            <div class="term-card">
+                <h4>Meta-теги</h4>
+                <p>HTML-теги с информацией о странице (title, description, keywords). Важны для SEO.</p>
+            </div>
+            <div class="term-card">
+                <h4>Slug</h4>
+                <p>Человекопонятный URL (например, /catalog/video-cards вместо /product?id=123).</p>
+            </div>
+            <div class="term-card">
+                <h4>Canonical URL</h4>
+                <p>Указывает поисковикам на основную версию страницы при дублировании контента.</p>
+            </div>
+        </div>
+
+        <h2 id="devops">DevOps</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>Docker</h4>
+                <p>Платформа контейнеризации. Упаковывает приложение со всеми зависимостями.</p>
+            </div>
+            <div class="term-card">
+                <h4>Docker Compose</h4>
+                <p>Инструмент для запуска нескольких контейнеров. Упрощает развёртывание.</p>
+            </div>
+            <div class="term-card">
+                <h4>CI/CD</h4>
+                <p>Continuous Integration / Continuous Deployment. Автоматизация сборки и развёртывания.</p>
+            </div>
+            <div class="term-card">
+                <h4>Nginx</h4>
+                <p>Веб-сервер и обратный прокси. Раздаёт статику, балансирует нагрузку.</p>
+            </div>
+            <div class="term-card">
+                <h4>Environment переменные</h4>
+                <p>Переменные окружения для хранения конфигурации (пароли, ключи API).</p>
+            </div>
+            <div class="term-card">
+                <h4>Let's Encrypt</h4>
+                <p>Бесплатный центр сертификации SSL/TLS. Предоставляет сертификаты на 90 дней.</p>
+            </div>
+        </div>
+
+        <h2 id="testing">Тестирование</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>Vitest</h4>
+                <p>Фреймворк для тестирования JavaScript. Быстрый, совместим с Jest.</p>
+            </div>
+            <div class="term-card">
+                <h4>Unit тесты</h4>
+                <p>Тестирование отдельных функций/компонентов изолированно.</p>
+            </div>
+            <div class="term-card">
+                <h4>API тесты</h4>
+                <p>Тестирование конечных точек API на корректность ответов.</p>
+            </div>
+            <div class="term-card">
+                <h4>UI тесты</h4>
+                <p>Тестирование пользовательского интерфейса (React Testing Library).</p>
+            </div>
+            <div class="term-card">
+                <h4>Supertest</h4>
+                <p>Библиотека для тестирования HTTP-запросов в Node.js.</p>
+            </div>
+            <div class="term-card">
+                <h4>Coverage report</h4>
+                <p>Отчёт о покрытии кода тестами. Показывает, какой процент кода протестирован.</p>
+            </div>
+        </div>
+
+        <h2 id="files">Работа с файлами</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>Multer</h4>
+                <p>Middleware для загрузки файлов в Express. Обрабатывает multipart/form-data.</p>
+            </div>
+            <div class="term-card">
+                <h4>S3-совместимое хранилище</h4>
+                <p>Облачное хранилище файлов по стандарту Amazon S3.</p>
+            </div>
+            <div class="term-card">
+                <h4>Множественная загрузка</h4>
+                <p>Загрузка нескольких файлов одновременно (галерея товаров).</p>
+            </div>
+        </div>
+
+        <h2 id="api">API</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>REST</h4>
+                <p>Representational State Transfer. Архитектурный стиль для распределённых систем.</p>
+            </div>
+            <div class="term-card">
+                <h4>Версионирование API</h4>
+                <p>Указание версии в URL (/api/v1/...). Позволяет поддерживать обратную совместимость.</p>
+            </div>
+            <div class="term-card">
+                <h4>Пагинация</h4>
+                <p>Разделение данных на страницы (?page=1&amp;limit=20). Уменьшает нагрузку.</p>
+            </div>
+            <div class="term-card">
+                <h4>HTTP коды статусов</h4>
+                <p><code>200</code> OK, <code>201</code> Created, <code>400</code> Bad Request, <code>401</code> Unauthorized, <code>403</code> Forbidden, <code>404</code> Not Found, <code>500</code> Internal Server Error</p>
+            </div>
+        </div>
+
+        <h2 id="auth">Аутентификация</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>JWT Token</h4>
+                <p>Токен доступа в формате JSON. Содержит payload с данными пользователя и подпись.</p>
+            </div>
+            <div class="term-card">
+                <h4>Хеширование паролей</h4>
+                <p>Преобразование пароля в хеш. Необратимо, защищает при утечке БД.</p>
+            </div>
+            <div class="term-card">
+                <h4>Сессионные токены</h4>
+                <p>Временные токены для аутентификации. Истекают через заданное время.</p>
+            </div>
+            <div class="term-card">
+                <h4>CORS</h4>
+                <p>Cross-Origin Resource Sharing. Политика безопасности для запросов между доменами.</p>
+            </div>
+        </div>
+
+        <h2 id="react">React хуки</h2>
+        <div class="term-grid">
+            <div class="term-card">
+                <h4>useState</h4>
+                <p>Добавляет состояние в функциональный компонент.</p>
+            </div>
+            <div class="term-card">
+                <h4>useEffect</h4>
+                <p>Выполняет побочные эффекты (запросы к API, подписки).</p>
+            </div>
+            <div class="term-card">
+                <h4>useContext</h4>
+                <p>Получает доступ к контексту React без пропсов.</p>
+            </div>
+            <div class="term-card">
+                <h4>useReducer</h4>
+                <p>Альтернатива useState для сложного состояния с редюсером.</p>
+            </div>
+            <div class="term-card">
+                <h4>useRef</h4>
+                <p>Создаёт изменяемую ссылку, сохраняющуюся между ререндерами.</p>
+            </div>
+            <div class="term-card">
+                <h4>useMemo</h4>
+                <p>Мемоизирует значение для оптимизации производительности.</p>
+            </div>
+            <div class="term-card">
+                <h4>useCallback</h4>
+                <p>Мемоизирует функцию для оптимизации производительности.</p>
+            </div>
+            <div class="term-card">
+                <h4>useNavigate</h4>
+                <p>Хук React Router для программной навигации.</p>
+            </div>
+        </div>
+
+        <footer style="margin-top: 80px; font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; padding-top: 20px; border-top: 1px solid #eee;">
+            .dev group / 2026 / Шпаргалка по технологиям
+        </footer>
+    </main>
+</div>
+
+<script>
+    const sections = document.querySelectorAll('h2[id]');
+    const navLinks = document.querySelectorAll('.nav-list a');
+
+    function updateActiveLink() {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (scrollY >= sectionTop - 100) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', updateActiveLink);
+    updateActiveLink();
+
+    function toggleMobileMenu() {
+        const sidebar = document.querySelector('.sidebar');
+        const btn = document.querySelector('.mobile-menu-btn');
+        sidebar.classList.toggle('mobile-open');
+        btn.classList.toggle('active');
+    }
+
+    document.querySelectorAll('.nav-list a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.remove('mobile-open');
+            document.querySelector('.mobile-menu-btn').classList.remove('active');
+        });
+    });
+</script>
+
+</body>
+</html>

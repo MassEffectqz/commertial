@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commercial Proposal | .dev group</title>
+    <link rel="icon" type="image/png" href="logo2.png">
     <style>
         * {
             box-sizing: border-box;
@@ -235,6 +236,14 @@
             letter-spacing: 1px;
             padding-top: 20px;
             border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo img {
+            height: 40px;
+            width: auto;
         }
 
         ul {
@@ -444,6 +453,16 @@
 
             .meta-info {
                 text-align: left;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-logo {
+                order: -1;
             }
         }
     </style>
@@ -883,10 +902,15 @@
         </div>
 
         <footer>
-            .dev group / 2026 / Все права защищены<br>
-            Копылов Данила Андреевич<br>
-            ИНН 343536065087<br>
-            +7 995 412 09 66
+            <div>
+                .dev group / 2026 / Все права защищены<br>
+                Копылов Данила Андреевич<br>
+                ИНН 343536065087<br>
+                +7 995 412 09 66
+            </div>
+            <div class="footer-logo">
+                <img src="logo2.png" alt=".dev group">
+            </div>
         </footer>
     </main>
 </div>
